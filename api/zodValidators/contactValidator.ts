@@ -1,5 +1,6 @@
 /** @format */
 
+import { ContactProps } from "@/domain/contactProps";
 import * as z from "zod";
 
 const nameSubjectRegex = /^[A-Za-z\s]+$/;
