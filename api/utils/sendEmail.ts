@@ -1,5 +1,6 @@
 /** @format */
 
+import { ContactProps } from "@/domain/contactProps";
 import transporter from "./nodemailer";
 
 function emailTemplate(contactProps: ContactProps) {
