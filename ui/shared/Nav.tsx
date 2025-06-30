@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
 import Image from 'next/image';
+import { SignupDialog } from "@/ui/components/dialog/SignupDialog";
 
 const Nav: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,9 +26,7 @@ const Nav: React.FC = () => {
 
           {/* Sign In Button */}
           <div className="hidden md:block">
-            <button className="bg-black text-white px-5 py-2 rounded-full hover:opacity-90 transition">
-              Sign in
-            </button>
+            <SignupDialog />
           </div>
 
           {/* Mobile Menu Toggle */}

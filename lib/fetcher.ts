@@ -32,12 +32,8 @@ export async function poster<T, B = any>(
   url: string,
   body: B
 ): Promise<{ success: true; data: T } | { success: false; errors?: any }> {
-  if (!BASE_URL) {
-    throw new Error(`Base URL not found`);
-  }
-
   try {
-    const res = await fetch(`${BASE_URL}${url}`, {
+    const res = await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -45,12 +41,25 @@ export async function poster<T, B = any>(
       body: JSON.stringify(body),
     });
 
-    const json: ApiResponse<T> = await res.json();
+    const json = await res.json();
 
-    if (!res.ok || json.errors) {
+    if (!res.ok) {
+      // If errors is an array (validation errors), extract the first message
+      let errorMsg = null;
+      if (Array.isArray(json?.errors) && json.errors.length > 0 && json.errors[0].message) {
+        errorMsg = json.errors[0].message;
+      } else if (json?.error) {
+        errorMsg = json.error;
+      } else if (json?.message) {
+        errorMsg = json.message;
+      } else if (json?.errors && typeof json.errors === "string") {
+        errorMsg = json.errors;
+      } else if (json?.errors && typeof json.errors === "object") {
+        errorMsg = json.errors.general?.[0];
+      }
       return {
         success: false,
-        errors: json.errors || { general: [`API error: ${res.status}`] },
+        errors: errorMsg || { general: [`API error: ${res.status}`] },
       };
     }
 
