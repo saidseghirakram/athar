@@ -1,0 +1,80 @@
+/** @format */
+
+@import "tailwindcss";
+
+:root {
+}
+
+@theme {
+  /* Base Colors */
+  --primary-color: #2e7d32;
+  --secondary-color: #b4d191;
+  --background: #ffffff;
+  --foreground: #111827;
+  --text: #030303;
+  --text-muted: #4b5563;
+  --foreground-text: #ffffff;
+
+  /* Cards */
+  --card-bg: #b4d191;
+  --card-bg-hover: #cde5af; /* slightly lighter green for hover */
+
+  /* Scroll */
+  --scroll-indicator-bg: #e5e7eb;
+
+  /* Inputs */
+  --input-border: #d1d5db;
+  --input-focus: #030303;
+  --input-hover: #e0e0e0;
+  --input-disabled: #f3f4f6;
+
+  /* Buttons */
+  --button-dark: #030303;
+  --button-light: #ffffff;
+  --button-primary: #2e7d32;
+  --button-secondary: #2e7d32;
+  --button-text-primary: #ffffff;
+  --button-text-secondary: #303030; /* fixed typo */
+
+  
+
+  /* Sections & Icons */
+  --section-bg: #b4d191;
+  --icon-bg: #ffffff;
+  --icon-color: #2e7d32;
+
+  /* Feedback */
+  --error: #dc2626;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+#map_outer,
+#map_zoom,
+#map_access {
+  /* display: none !important; */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+.shadow-text {
+  color: white;
+  -webkit-text-stroke: 0.5px green;
+  text-shadow:
+    -1px -1px 0 green,
+     1px -1px 0 green,
+    -1px  1px 0 black,
+     1px  1px 0 green;
+}
+
