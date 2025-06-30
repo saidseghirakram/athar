@@ -194,15 +194,13 @@ const SignupForm = ({
         </div>
         <div className="space-y-2">
           <Label htmlFor="role">Role</Label>
-          <Select name="role">
+          <Select name="role" defaultValue="volunteer" disabled>
             <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select your Role" />
+              <SelectValue placeholder="Volunteer" />
             </SelectTrigger>
             <SelectContent className="bg-[var(--background)]">
               <SelectGroup className="z-10">
                 <SelectItem value="volunteer">Volunteer</SelectItem>
-                <SelectItem value="user">User</SelectItem>
-                <SelectItem value="admin">Admin</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>
