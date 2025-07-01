@@ -6,12 +6,11 @@ import useSWR from "swr";
 import Spinner from "@/ui/shared/Spinner";
 import { useMemo, useState } from "react";
 import PlanCard from "@/ui/components/cards/planCard";
-import { plans } from "@/data/planes";
 import EmptyPlanCard from "@/ui/components/cards/EmptyCard";
 import { LocationConfig } from "@/domain/marker";
 
 export default function Page() {
-  // const { data, isLoading, error } = useSWR(fetcher("/api/destinations"));
+  const { data: plans, error, isLoading } = useSWR("/guest/plans", fetcher);
   const [activeCardId, setActiveCardId] = useState<number | null>(null);
 
   const handlePositionClick = (id: number) => {
@@ -20,9 +19,9 @@ export default function Page() {
   };
 
   const Map = useMemo(() => {
+    if (!plans) return null;
     const locations: { [key: number]: LocationConfig } = {};
-
-    plans.forEach((plan, index) => {
+    plans.forEach((plan: any, index: number) => {
       const loc = plan.destination?.location;
       if (loc) {
         locations[index] = {
@@ -40,12 +39,14 @@ export default function Page() {
       />
     );
   }, [plans]);
-  // if (isLoading) return <Spinner />;
-  // if (error) return <div>error</div>;
+
+  if (isLoading) return <Spinner />;
+  if (error) return <div>error</div>;
+
   return (
     <div className="w-full h-full flex flex-col-reverse lg:flex-row  py-28">
       <div className="mt-6 lg:m-0 px-5">
-        {activeCardId != null ? (
+        {activeCardId != null && plans ? (
           <PlanCard plan={plans[activeCardId]} />
         ) : (
           <EmptyPlanCard />

@@ -1,7 +1,7 @@
 import { ApiResponse } from "@/domain/apiResponse";
 import Cookies from "js-cookie";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 export async function fetcher<T>(url: string): Promise<T> {
   if (!BASE_URL) {

@@ -1,10 +1,35 @@
+'use client'
+
 import { Search, Filter } from 'lucide-react'
-import React from 'react'
-import { plans } from '@/data/planes'
+import React, { useEffect, useState } from 'react'
+import { fetcher } from '@/lib/fetcher'
+import { Plan } from '@/domain/plan'
 import MainCard from '@/ui/components/cards/MainCard'
 
 function page() {
-  const displayPlans = [...plans, ...plans, ...plans, ...plans]
+  const [plans, setPlans] = useState<Plan[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    setLoading(true)
+    console.log('Fetching plans from /guest/plans...')
+    fetcher<Plan[]>('/guest/plans')
+      .then((data) => {
+        console.log('Fetched plans:', data)
+        setPlans(data)
+        setLoading(false)
+      })
+      .catch((err) => {
+        console.error('Failed to load plans:', err)
+        setError('Failed to load plans')
+        setLoading(false)
+      })
+  }, [])
+
+  useEffect(() => {
+    console.log('Loading:', loading, 'Error:', error, 'Plans:', plans)
+  }, [loading, error, plans])
 
   return (
     <div className='w-full min-h-screen pt-20 bg-gray-50/50'>
@@ -32,12 +57,26 @@ function page() {
             <span>Filter</span>
           </button>
         </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
-          {displayPlans.map((plan, index) => (
-            <MainCard key={`${plan.id}-${index}`} plan={plan} />
-          ))}
-        </div>
+        {loading ? (
+          <div className="w-full flex justify-center items-center py-20">
+            <span className="text-lg text-gray-500">Loading...</span>
+          </div>
+        ) : error ? (
+          <div className="w-full flex flex-col justify-center items-center py-20">
+            <span className="text-lg text-red-500">{error}</span>
+            <span className="text-sm text-gray-400 mt-2">Check your API, network, and environment variables.</span>
+          </div>
+        ) : plans.length === 0 ? (
+          <div className="w-full flex justify-center items-center py-20">
+            <span className="text-lg text-gray-500">No volunteering projects found.</span>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+            {plans.map((plan, index) => (
+              <MainCard key={`${plan.id}-${index}`} plan={plan} />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   )
