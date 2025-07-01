@@ -19,7 +19,7 @@ export default function Page() {
   };
 
   const Map = useMemo(() => {
-    if (!plans) return null;
+    if (!Array.isArray(plans)) return null;
     const locations: { [key: number]: LocationConfig } = {};
     plans.forEach((plan: any, index: number) => {
       const loc = plan.destination?.location;
