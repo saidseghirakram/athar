@@ -8,6 +8,7 @@ import { use } from "react";
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
 import PlanCard from "@/ui/components/cards/planCard";
+import { ApplyGuidDialog } from "@/ui/components/dialog/AppyGuidDialog";
 
 export default function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -93,6 +94,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
         </div>
 
         <div className="mt-6 w-full flex justify-center flex-wrap gap-2">
+          <ApplyGuidDialog planId={id} />
           {["Accommodation", "Meals", "Facilities", "Support"].map((e, ind) => (
             <Button key={ind} variant={"outline"}>
               <Check className="mr-1 w-5" /> {e}

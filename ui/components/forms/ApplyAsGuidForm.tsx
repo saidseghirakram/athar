@@ -14,10 +14,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useState, useEffect } from "react";
 import Spinner from "../../shared/Spinner";
 import { Check, Send } from "lucide-react";
 import { poster } from "@/lib/fetcher";
+import { useRouter } from 'next/router';
 
 const initValidation = {
   name: [],
@@ -33,9 +34,11 @@ const initValidation = {
 const ApplyAsGuidForm = ({
   success,
   setSuccess,
+  planId,
 }: {
   success: boolean;
   setSuccess: Dispatch<SetStateAction<boolean>>;
+  planId?: string;
 }) => {
   const [loading, setLoading] = useState(false);
 
@@ -59,18 +62,28 @@ const ApplyAsGuidForm = ({
 
     const formData = new FormData(e.currentTarget);
 
-    const payload = {
+    const payload: any = {
       name: formData.get("name") as string,
       email: formData.get("email") as string,
-      phone: Number(formData.get("phone")),
+      phone: String(formData.get("phone")),
       age: Number(formData.get("age")),
-      gender: formData.get("gender") as string,
+      gender: (formData.get("gender") as string)?.toUpperCase(),
       country: formData.get("country") as string,
       city: formData.get("city") as string,
       message: formData.get("message") as string,
     };
+    if (planId) {
+      payload.planId = planId;
+    } else if (typeof window !== 'undefined') {
+      const match = window.location.pathname.match(/\/plans\/([\w-]+)/);
+      if (match && match[1]) {
+        payload.planId = match[1];
+      }
+    }
 
-    const res = await poster("/api/apply-as-guid", payload);
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+    const apiUrl = baseUrl ? baseUrl + '/guest/volunteer' : '/volunteer';
+    const res = await poster(apiUrl, payload);
     if (res.success) {
       setSuccess(true);
       setError(null);
@@ -85,7 +98,7 @@ const ApplyAsGuidForm = ({
   };
 
   return success ? (
-    <div className="flex items-center mb-6">
+    <div className="flex items-center mb-6 mt-100">
       <div className="shrink-0 bg-[var(--icon-bg)] p-3 rounded-full">
         <Check className="w-5 h-5 text-[var(--icon-color)]" />
       </div>
