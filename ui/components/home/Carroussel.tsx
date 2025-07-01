@@ -179,15 +179,6 @@ export default function DestinationsCarousel({ title, description }: Destination
                   </div>
                 </div>
                 <div className="flex justify-center">
-                  <div className="w-full bg-primary/90 rounded-b-2xl py-4 flex justify-center shadow-lg">
-                    <Link href={`/plans/${destination.id}`} className="w-full flex justify-center">
-                      <button
-                        className="px-6 py-2 text-base font-semibold text-white bg-transparent rounded-lg hover:bg-white/10 transition-colors text-shadow-black w-full"
-                      >
-                        RÉSERVER
-                      </button>
-                    </Link>
-                  </div>
                 </div>
               </div>
             </div>
