@@ -3,10 +3,13 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
 import Image from 'next/image';
-import { SignupDialog } from "@/ui/components/dialog/SignupDialog";
+import { AuthDialog } from "@/ui/components/dialog/AuthDialog";
+import { useAtom } from 'jotai';
+import { tokenAtom } from '@/atom/auth'; // adjust path as needed
 
 const Nav: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [token] = useAtom(tokenAtom);
 
   return (
     <nav className="fixed top-0 left-0 w-full bg-[rgba(255,255,255,0.2)] backdrop-blur-md z-100">
@@ -26,7 +29,13 @@ const Nav: React.FC = () => {
 
           {/* Sign In Button */}
           <div className="hidden md:block">
-            <SignupDialog />
+            {token ? (
+              <button className="bg-green-600 text-white px-4 py-2 rounded-full w-fit mt-2">
+                Profile
+              </button>
+            ) : (
+              <AuthDialog />
+            )}
           </div>
 
           {/* Mobile Menu Toggle */}

@@ -1,8 +1,5 @@
-/** @format */
-
 import { ApiResponse } from "@/domain/apiResponse";
-
-// lib/fetcher.ts
+import Cookies from "js-cookie";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -27,11 +24,16 @@ export async function fetcher<T>(url: string): Promise<T> {
   return json.data as T;
 }
 
-
 export async function poster<T, B = any>(
   url: string,
   body: B
-): Promise<{ success: true; data: T } | { success: false; errors?: any }> {
+): Promise<{
+  success: true;
+  data: T;
+} | {
+  success: false;
+  errors?: any;
+}> {
   try {
     const res = await fetch(url, {
       method: "POST",
@@ -44,7 +46,6 @@ export async function poster<T, B = any>(
     const json = await res.json();
 
     if (!res.ok) {
-      // If errors is an array (validation errors), extract the first message
       let errorMsg = null;
       if (Array.isArray(json?.errors) && json.errors.length > 0 && json.errors[0].message) {
         errorMsg = json.errors[0].message;
@@ -57,10 +58,23 @@ export async function poster<T, B = any>(
       } else if (json?.errors && typeof json.errors === "object") {
         errorMsg = json.errors.general?.[0];
       }
+
       return {
         success: false,
         errors: errorMsg || { general: [`API error: ${res.status}`] },
       };
+    }
+
+    // ✅ Save token to cookies
+    const token = json?.data?.token;
+    if (token) {
+      Cookies.set("token", token, {
+        expires: 7, // in days
+        path: "/",
+        secure: true,
+        sameSite: "Strict",
+      });
+      console.log("✅ Token saved in cookies:", token);
     }
 
     return {
